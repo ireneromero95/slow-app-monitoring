@@ -8,7 +8,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128m
+          memory: 32m
   slow-api_2:
     build: ./app
     environment:
@@ -18,7 +18,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128m
+          memory: 32m
   slow-api_3:
     build: ./app
     environment:
@@ -28,7 +28,7 @@ services:
     deploy:
       resources:
         limits:
-          memory: 128m
+          memory: 32m
   nginx-lb:
     image: nginx:alpine
     volumes:
