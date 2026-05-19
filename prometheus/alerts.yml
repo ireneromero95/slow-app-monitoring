@@ -1,0 +1,25 @@
+groups:
+  - name: slow-app-rules
+    rules:
+      - alert: HighInFlightConnections
+        expr: sum(nginx_connections_reading + nginx_connections_writing) > 0
+        for: 10s
+        labels:
+          severity: warning
+        annotations:
+          summary: 'High in-flight connections at Nginx'
+          description: 'sum(reading+writing) > 0 for 10s. Increase capacity or reduce traffic.'
+
+      - alert: HighMemoryUsage
+        expr: |
+          (
+            max by (container_label_com_docker_compose_service) (container_memory_working_set_bytes{container_label_com_docker_compose_service=~"slow-api.*"})
+            /
+            max by (container_label_com_docker_compose_service) (container_spec_memory_limit_bytes{container_label_com_docker_compose_service=~"slow-api.*"})
+          ) > 0.1
+        for: 10s
+        labels:
+          severity: critical
+        annotations:
+          summary: 'Container using >50% of its memory limit'
+          description: 'Working set / limit > 0.1 for 10s on one or more slow-api replicas.'
